@@ -94,16 +94,16 @@ if ($hasDsh) {
   Ok '已安装 dsh,跳过'
 } else {
   Write-Host '  正在安装 dsh(需要联网,约 1-2 分钟)...'
-  npm install -g @deepseek-ai/dsh 2>&1 | Out-Host
-  if ($LASTEXITCODE -eq 0 -and (Get-Command dsh -ErrorAction SilentlyContinue)) {
-    Ok 'dsh 安装成功'
-    $dshPath = Join-Path $env:APPDATA 'npm\dsh.cmd'
-    if (Test-Path $dshPath) { Ok 'dsh 命令已就位,以后可以随时更新' }
-  } else {
+  # run npm through cmd so deprecation warnings do not abort the script
+  & cmd /c "npm install -g @deepseek-ai/dsh"
+  if ($LASTEXITCODE -ne 0) {
     Fail 'dsh 安装失败,请检查网络后重新运行安装器'
     Read-Host '  按回车退出'
     exit 1
   }
+  Ok 'dsh 安装成功'
+  $dshPath = Join-Path $env:APPDATA 'npm\dsh.cmd'
+  if (Test-Path $dshPath) { Ok 'dsh 命令已就位,以后可以随时更新' }
 }
 
 # ---------- 第 3 步:配置 API Key ----------
