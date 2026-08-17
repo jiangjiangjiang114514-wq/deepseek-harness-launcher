@@ -1,4 +1,4 @@
-﻿# ============================================================
+# ============================================================
 #  DeepSeek Harness 一键安装器(傻瓜版)
 #  自动完成:装 Node.js(没有的话)-> 装 dsh -> 配 API Key -> 建快捷方式
 #  运行:双击 install.cmd 即可
@@ -128,7 +128,7 @@ if ($keyConfigured) {
 Step '第 4 步:创建快捷方式'
 $here = $PSScriptRoot
 $ws = New-Object -ComObject WScript.Shell
-$name = 'DeepSeek Harness Launcher'
+$name = 'DeepSeek Harness 启动器'
 $icon = Join-Path $here 'launcher.ico'
 function New-LauncherShortcut([string]$path) {
   $s = $ws.CreateShortcut($path)
