@@ -9,8 +9,8 @@ the server automatically.
 
 ## Quick start (Windows 10/11)
 
-1. Install Node.js LTS from https://nodejs.org
-2. Get an API key at https://platform.deepseek.com (API Keys -> Create)
+1. Get an API key at https://platform.deepseek.com (API Keys -> Create)
+2. Unzip this repo, then **double-click \`install.cmd\`** — it auto-installs Node.js if missing (no admin needed), installs dsh, asks for your API key, and creates shortcuts at https://platform.deepseek.com (API Keys -> Create)
 3. Unzip this repo, then **double-click `install.cmd`** (checks env, installs dsh,
    asks for your API key, creates Desktop & Start Menu shortcuts)
 4. Double-click **DeepSeek Harness Launcher** and enjoy.
