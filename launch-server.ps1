@@ -1,7 +1,9 @@
 # Launch the DeepSeek Harness server hidden, logging to server.log.
-# Locates dsh / npx by full path so it works even when PATH is stale.
+# Locates dsh / npx by full path. Uses a temp .cmd wrapper so that
+# paths with spaces and quotes survive Start-Process argument joining.
 $ErrorActionPreference = 'SilentlyContinue'
 $log = Join-Path $PSScriptRoot 'server.log'
+$bat = Join-Path $env:TEMP 'dsh-start-hidden.cmd'
 
 $dsh = $null
 foreach ($c in @(
@@ -22,14 +24,13 @@ foreach ($c in @(
 }
 
 if ($dsh) {
-  $cmd = '"' + $dsh + '" web 1>>"' + $log + '" 2>&1'
-  Start-Process cmd -ArgumentList '/c', $cmd -WindowStyle Hidden
+  $cmdLine = 'call "' + $dsh + '" web 1>>"' + $log + '" 2>&1'
 } elseif ($npx) {
-  $cmd = '"' + $npx + '" --offline @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1 || "' + $npx + '" @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1'
-  Start-Process cmd -ArgumentList '/c', $cmd -WindowStyle Hidden
+  $cmdLine = 'call "' + $npx + '" --offline @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1 || call "' + $npx + '" @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1'
 } else {
-  # nothing found - record diagnostics and try PATH anyway
-  Add-Content -Path $log -Value ('[launch-server] dsh/npx not found by path. Trying PATH. APPDATA=' + $env:APPDATA)
-  $cmd = 'npx --offline @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1 || npx @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1'
-  Start-Process cmd -ArgumentList '/c', $cmd -WindowStyle Hidden
+  $cmdLine = 'npx --offline @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1 || npx @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1'
 }
+
+Add-Content -Path $log -Value ('[launch-server] attempt: dsh=' + $dsh + ' npx=' + $npx)
+Set-Content -Path $bat -Value ('@echo off' + "\`r\`n" + $cmdLine) -Encoding ASCII
+Start-Process cmd -ArgumentList '/c', $bat -WindowStyle Hidden
