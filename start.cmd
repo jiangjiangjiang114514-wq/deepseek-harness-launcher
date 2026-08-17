@@ -19,14 +19,18 @@ rem --- start the server HIDDEN (no console window), log to server.log ---
 rem launch-server.ps1 locates dsh/npx by full path (works without PATH refresh)
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0launch-server.ps1"
 echo Starting DeepSeek Harness server (hidden, log: server.log)...
+echo 首次启动需要初始化环境,可能需要几分钟,请耐心等待...
+echo (进度:server.log 在持续更新就说明在正常工作)
 
-rem --- wait for the server, up to 90 seconds ---
+rem --- wait for the server, up to 300 seconds ---
 set /a tries=0
 :wait
 powershell -NoProfile -Command "try { (Invoke-WebRequest -UseBasicParsing -Uri '%URL%' -TimeoutSec 2 | Out-Null); exit 0 } catch { exit 1 }"
 if not errorlevel 1 goto open
 set /a tries+=1
-if %tries% geq 90 goto fail
+set /a mod = tries %% 10
+if %mod% equ 0 echo 已等待 %tries% 秒,服务器仍在启动(首次使用请耐心等待)...
+if %tries% geq 300 goto fail
 timeout /t 1 /nobreak >nul
 goto wait
 
@@ -53,7 +57,7 @@ exit /b 0
 
 :fail
 echo.
-echo Timed out waiting for the server.
-echo Look at server.log for error details.
+echo Timed out waiting for the server (5 minutes).
+echo Please open server.log and check the last lines for errors.
 timeout /t 15 /nobreak >nul
 exit /b 1
