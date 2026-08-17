@@ -28,8 +28,15 @@ set /a tries=0
 powershell -NoProfile -Command "try { (Invoke-WebRequest -UseBasicParsing -Uri '%URL%' -TimeoutSec 2 | Out-Null); exit 0 } catch { exit 1 }"
 if not errorlevel 1 goto open
 set /a tries+=1
-set /a mod = tries %% 10
-if %mod% equ 0 echo 已等待 %tries% 秒,服务器仍在启动(首次使用请耐心等待)...
+set /a mod10 = tries %% 10
+if %mod10% equ 0 echo 已等待 %tries% 秒,服务器仍在启动(首次使用请耐心等待)...
+set /a mod20 = tries %% 20
+if %mod20% equ 0 (
+  echo.
+  echo --- server.log 最近输出 ---
+  powershell -NoProfile -Command "Get-Content -Path '%~dp0server.log' -Tail 5 -ErrorAction SilentlyContinue"
+  echo --------------------------
+)
 if %tries% geq 300 goto fail
 timeout /t 1 /nobreak >nul
 goto wait
