@@ -16,7 +16,13 @@ powershell -NoProfile -Command "if (Test-NetConnection -ComputerName 127.0.0.1 -
 if not errorlevel 1 goto open
 
 rem --- start the server HIDDEN (no console window), log to server.log ---
-powershell -NoProfile -Command "Start-Process cmd -ArgumentList '/c','npx --offline @deepseek-ai/dsh web 1>>%~dp0server.log 2>&1 || npx @deepseek-ai/dsh web 1>>%~dp0server.log 2>&1' -WindowStyle Hidden"
+rem prefer the globally installed dsh, fall back to npx
+where dsh >nul 2>&1
+if not errorlevel 1 (
+  powershell -NoProfile -Command "Start-Process cmd -ArgumentList '/c','dsh web 1>>%~dp0server.log 2>&1' -WindowStyle Hidden"
+) else (
+  powershell -NoProfile -Command "Start-Process cmd -ArgumentList '/c','npx --offline @deepseek-ai/dsh web 1>>%~dp0server.log 2>&1 || npx @deepseek-ai/dsh web 1>>%~dp0server.log 2>&1' -WindowStyle Hidden"
+)
 echo Starting DeepSeek Harness server (hidden, log: server.log)...
 
 rem --- wait for the server, up to 90 seconds ---

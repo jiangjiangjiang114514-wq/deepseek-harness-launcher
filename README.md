@@ -1,87 +1,108 @@
-# DeepSeek Harness 一键启动器 (dsh-launcher)
+# DeepSeek Harness 一键安装启动器
 
-为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 提供**双击即用**的启动体验:
-点一下 → 服务器静默启动(无终端窗口)→ 自动打开独立应用窗口;叉掉窗口 → 服务器自动停止。再也不用每次在终端敲 `npx @deepseek-ai/dsh web`。
+![Windows](https://img.shields.io/badge/Windows-10%2F11-blue)
 
-> ⚠️ 本项目是社区工具,与 DeepSeek 官方无关。
+一个**纯小白也能上手**的工具:帮你自动装好 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)、配好 API Key、创建桌面快捷方式。
+以后**双击一下**就能用,不用再敲命令,也不会弹出黑乎乎的终端窗口。
 
-## 特性
+> ⚠️ 这是社区工具,与 DeepSeek 官方无关。DeepSeek Harness 是 DeepSeek 官方开源的 AI 编程工具。
 
-- ✅ **一键启动**:双击快捷方式,自动启动服务器 + 打开应用窗口
-- ✅ **无终端窗口**:服务器完全隐藏后台运行(日志写入 `server.log`)
-- ✅ **自动关闭**:关闭应用窗口后约 6 秒,服务器自动停止,无残留进程
-- ✅ **独立窗口**:优先打开已安装的 Edge 应用(PWA),否则以 Edge 应用模式打开,不占浏览器标签页
-- ✅ **自动兜底**:应用窗口打不开时自动用浏览器打开,保证"点了一定有反应"
-- ✅ **可诊断**:`server.log`(服务器日志)、`watchdog.log`(监视器日志)
+---
 
-## 环境要求
+## 它能做什么
 
-- Windows 10 / 11
-- [Node.js](https://nodejs.org) ≥ 18(能运行 `npx @deepseek-ai/dsh web` 即可)
-- Microsoft Edge
-- 已配置好 DSH 环境(API key 等,即 `npx @deepseek-ai/dsh web` 能正常启动)
-
-## 快速开始
-
-1. 下载本仓库(或 `git clone`)
-2. (可选,推荐)全局安装 dsh,启动更快:
-   ```
-   npm install -g @deepseek-ai/dsh
-   ```
-   安装后脚本仍可用;未安装时脚本自动走 npx。
-3. 运行安装脚本创建快捷方式:
-   ```
-   powershell -ExecutionPolicy Bypass -File install.ps1
-   ```
-   会在**开始菜单**和**桌面**创建「DeepSeek Harness Launcher」快捷方式。
-4. 双击快捷方式即可使用。建议右键快捷方式 → **固定到任务栏**,以后单击即用。
-
-### 首次使用建议:安装为应用(PWA)
-
-启动一次后,在 Edge 中打开 `http://127.0.0.1:3080`,点地址栏右侧的 **应用图标**(或 ⋯ → 应用 → 将此站点安装为应用),安装后启动器会自动以**独立应用窗口**打开(无地址栏,体验最佳)。
-
-## 使用说明
-
-| 操作 | 效果 |
+| 功能 | 说明 |
 |---|---|
-| 双击「DeepSeek Harness Launcher」 | 服务器没运行则隐藏启动并等待就绪,然后打开应用窗口;已在运行则直接打开窗口 |
-| 叉掉应用窗口 | 约 6 秒后服务器自动停止 |
-| 运行 `stop.cmd` | 强制停止服务器(备用手段) |
-| 查看 `server.log` | 服务器输出(以前终端里显示的内容) |
+| 🚀 一键安装 | 自动检查 Node.js、安装 dsh、引导配置 API Key、创建快捷方式 |
+| 🖱️ 一键启动 | 双击快捷方式 = 启动服务器(无终端窗口)+ 自动打开应用窗口 |
+| 🧹 自动关闭 | 叉掉应用窗口,服务器自动停止,无残留 |
+| 📋 日志可查 | 出问题看 `server.log`,不用再盯着黑窗口 |
 
-## 工作原理
+---
 
-1. **start.cmd** 检查端口 3080:未运行则用隐藏窗口启动服务器(`npx @deepseek-ai/dsh web`,日志重定向到 `server.log`),等待就绪
-2. 打开应用窗口:优先已安装的 PWA(`shell:AppsFolder`),否则 Edge 应用模式(`--app=`),再否则浏览器
-3. **watchdog.ps1**(隐藏进程)监视与服务器的连接:所有窗口关闭后连续 6 秒无连接 → 停止服务器进程树
-4. 服务器停止后一切结束,无残留窗口/进程
+## 安装步骤(三分钟)
 
-## 常见问题
+### 第 1 步:安装 Node.js(只需一次)
 
-**Q: 点快捷方式没反应?**
-A: 先看 `server.log` 是否有报错;确认能手动运行 `npx @deepseek-ai/dsh web`。
+1. 打开 https://nodejs.org
+2. 下载 **LTS 版本**(左边那个大按钮)
+3. 双击安装,一路点"下一步"直到完成
 
-**Q: 应用窗口白屏?**
-A: 服务器还没启动完成,稍等重试;或看 `server.log`。
+> 检查是否装好:按 `Win + R`,输入 `cmd` 回车,输入 `node -v`,能看到版本号就行。
 
-**Q: 叉掉窗口后服务器没停?**
-A: 如果你同时在浏览器标签页里开着 DSH 页面,连接仍在,监视器会等到标签页也关闭才停止。想立刻停用 `stop.cmd`。
+### 第 2 步:准备 API Key(只需一次)
 
-**Q: 希望启动更快?**
-A: `npm install -g @deepseek-ai/dsh` 后服务器跳过 npx 解析,启动明显变快。
+1. 打开 https://platform.deepseek.com 并登录
+2. 左侧菜单 → **API Keys** → **创建**
+3. 复制生成的 Key(以 `sk-` 开头;需要账户有余额,充值才能用)
+
+### 第 3 步:运行一键安装器
+
+把整个文件夹解压到任意位置(例如 `D:\dsh-launcher`),然后:
+
+**双击 `install.cmd`**
+
+它会自动完成:
+- ✅ 检查 Node.js
+- ✅ 安装 dsh(需要联网,约 1-2 分钟)
+- ✅ 提示你粘贴 API Key
+- ✅ 在**桌面**和**开始菜单**创建「DeepSeek Harness Launcher」快捷方式
+
+### 第 4 步:开始使用
+
+双击桌面的「DeepSeek Harness Launcher」:
+- 第一次启动稍慢(初始化环境),之后都很快
+- 会自动弹出应用窗口,和浏览器里的页面一模一样,但不占标签页
+- **用完直接叉掉窗口,服务器自动停止**
+
+---
+
+## 使用小贴士
+
+- **固定到任务栏**:右键快捷方式 → 固定到任务栏,以后单击即用
+- **首次使用建议装成应用**:打开后,在 Edge 地址栏右侧点"应用"图标 → "将此站点安装为应用",之后窗口更好看
+- **启动太慢?** 检查网络;dsh 首次使用会下载依赖
+- **想强制停止?** 双击 `stop.cmd`
+
+---
+
+## 遇到问题?
+
+**Q: 双击 install.cmd 没反应?**
+A: 确认已经装了 Node.js(第 1 步)。
+
+**Q: 安装 dsh 失败/很慢?**
+A: 检查网络;或者手动打开 cmd 执行 `npm install -g @deepseek-ai/dsh` 看报错。
+
+**Q: 点快捷方式后页面打不开?**
+A: 打开文件夹里的 `server.log`,看最后几行有没有报错(常见:API Key 没配置好)。
+
+**Q: 叉掉窗口后服务器还在?**
+A: 如果浏览器标签页里也开着 DeepSeek Harness 页面,需要连标签页一起关;或双击 `stop.cmd` 强制停止。
+
+**Q: API Key 怎么改?**
+A: 编辑 `C:\Users\你的用户名\.dsh\.credentials.yaml`,改 `DEEPSEEK_API_KEY` 那一行。
+
+---
 
 ## 文件说明
 
 | 文件 | 作用 |
 |---|---|
-| `start.cmd` | 主启动器(启动服务器 + 打开窗口 + 拉起监视器) |
-| `watchdog.ps1` | 隐藏监视器(窗口全关后自动停服务器) |
-| `stop.cmd` / `stop.ps1` | 强制停止(备用) |
-| `install.ps1` | 创建开始菜单/桌面快捷方式 |
-| `check-appwindow.ps1` / `check-watchdog.ps1` | 自检辅助脚本 |
-| `launcher.ico` | 快捷方式图标(基于 DeepSeek 品牌图标,版权归 DeepSeek) |
-| `server.log` / `watchdog.log` | 运行时日志(自动生成) |
+| `install.cmd` / `install.ps1` | 一键安装器(装 dsh、配 Key、建快捷方式) |
+| `start.cmd` | 启动器(隐藏启动服务器 + 打开应用窗口) |
+| `watchdog.ps1` | 后台监视器(窗口关了就自动停服务器) |
+| `stop.cmd` / `stop.ps1` | 强制停止服务器 |
+| `launcher.ico` | 快捷方式图标(DeepSeek 品牌元素版权归 DeepSeek) |
+| `server.log` / `watchdog.log` | 运行日志(自动生成) |
+
+## 工作原理(给好奇的人)
+
+1. `start.cmd` 检查 3080 端口,没运行就用**隐藏窗口**启动服务器(日志写入 `server.log`)
+2. 等服务器就绪后,打开应用窗口(优先已安装的 PWA,其次 Edge 应用模式,兜底浏览器)
+3. 隐藏的 `watchdog.ps1` 盯着网络连接:所有窗口关闭后 6 秒,自动停止服务器
+4. 一切结束,没有残留窗口和进程
 
 ## 许可证
 
-[MIT](LICENSE)。launcher.ico 中的 DeepSeek 品牌元素版权归 DeepSeek 所有。
+MIT License。详见 [LICENSE](LICENSE)。

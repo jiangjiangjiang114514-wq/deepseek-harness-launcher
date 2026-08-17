@@ -1,48 +1,23 @@
-# DeepSeek Harness Launcher (dsh-launcher)
+# DeepSeek Harness One-Click Installer & Launcher
 
-One-click launcher for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) on Windows:
-click once -> the server starts **hidden** (no console window) -> the app window opens automatically;
-close the window -> the server stops itself. No more typing `npx @deepseek-ai/dsh web` every time.
+A beginner-friendly Windows tool for [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness):
+installs dsh, configures your API key, creates shortcuts, starts the server **hidden**
+(no console window) and opens the app window with one click. Closing the window stops
+the server automatically.
 
-> This is a community tool, not affiliated with DeepSeek.
+> Community tool, not affiliated with DeepSeek.
 
-## Features
+## Quick start (Windows 10/11)
 
-- One-click start: server + app window
-- Server runs fully hidden (logs go to `server.log`)
-- Auto stop ~6s after the last window closes (watchdog)
-- Opens the installed Edge PWA when available, otherwise Edge app-mode, otherwise the browser
-- Fallback chain guarantees the click always does something
-- Logs: `server.log` (server), `watchdog.log` (watcher)
+1. Install Node.js LTS from https://nodejs.org
+2. Get an API key at https://platform.deepseek.com (API Keys -> Create)
+3. Unzip this repo, then **double-click `install.cmd`** (checks env, installs dsh,
+   asks for your API key, creates Desktop & Start Menu shortcuts)
+4. Double-click **DeepSeek Harness Launcher** and enjoy.
 
-## Requirements
-
-- Windows 10/11, Node.js >= 18, Microsoft Edge
-- A working DSH setup (`npx @deepseek-ai/dsh web` must start)
-
-## Quick start
-
-```
-git clone https://github.com/<you>/deepseek-harness-launcher.git
-cd deepseek-harness-launcher
-npm install -g @deepseek-ai/dsh        # optional but faster
-powershell -ExecutionPolicy Bypass -File install.ps1
-```
-
-Then double-click the **DeepSeek Harness Launcher** shortcut (Start Menu / Desktop / pinned to taskbar).
-
-Tip: install the page as an Edge app once (open http://127.0.0.1:3080 -> address-bar app icon -> Install)
-for the best standalone-window experience.
-
-## How it works
-
-`start.cmd` checks port 3080; if the server is down it starts `npx @deepseek-ai/dsh web` in a hidden
-window (output redirected to `server.log`) and waits until it responds. It then opens the app window
-(PWA -> Edge app-mode -> browser). A hidden `watchdog.ps1` watches the TCP connections to port 3080
-and kills the server process tree 6 seconds after the last connection closes.
-
-Use `stop.cmd` to force-stop anytime.
+Close the app window -> server stops in ~6s. Use `stop.cmd` to force-stop.
+Logs: `server.log` (server), `watchdog.log` (watcher).
 
 ## License
 
-MIT. DeepSeek brand elements in launcher.ico belong to DeepSeek.
+MIT.
