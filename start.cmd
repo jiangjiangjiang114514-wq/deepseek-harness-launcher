@@ -20,7 +20,7 @@ rem launch-server.ps1 locates dsh/npx by full path (works without PATH refresh)
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0launch-server.ps1"
 echo Starting DeepSeek Harness server (hidden, log: server.log)...
 echo First launch may take a few minutes to initialize...
-echo (进度:server.log 在持续更新就说明在正常工作)
+echo (Progress: server.log is written if the server is working)
 
 rem --- wait for the server, up to 300 seconds ---
 set /a tries=0
@@ -33,7 +33,7 @@ if %mod10% equ 0 echo Waited %tries% seconds, server still starting...
 set /a mod20 = tries %% 20
 if %mod20% equ 0 (
   echo.
-  echo --- server.log 最近输出 ---
+  echo --- recent server.log output ---
   powershell -NoProfile -Command "Get-Content -Path '%~dp0server.log' -Tail 5 -ErrorAction SilentlyContinue"
   echo --------------------------
 )
