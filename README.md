@@ -17,6 +17,7 @@
 | 🖱️ 一键启动 | 双击快捷方式 = 启动服务器(无终端窗口)+ 自动打开应用窗口 |
 | 🧹 自动关闭 | 叉掉应用窗口,服务器自动停止,无残留 |
 | 📋 日志可查 | 出问题看 `server.log`,不用再盯着黑窗口 |
+| 🔄 一键更新 | dsh 发新版本,双击 `update.cmd` 即可跟进,启动器不用重装 |
 
 ---
 
@@ -55,6 +56,7 @@
 - **首次使用建议装成应用**:打开后,在 Edge 地址栏右侧点"应用"图标 → "将此站点安装为应用",之后窗口更好看
 - **启动太慢?** 检查网络;dsh 首次使用会下载依赖
 - **想强制停止?** 双击 `stop.cmd`
+- **想更新 dsh?** 双击 `update.cmd`(详见下方「如何更新」)
 
 ---
 
@@ -81,6 +83,9 @@ A: 打开文件夹里的 `server.log`,看最后几行有没有报错(常见:API 
 **Q: 叉掉窗口后服务器还在?**
 A: 如果浏览器标签页里也开着 DeepSeek Harness 页面,需要连标签页一起关;或双击 `stop.cmd` 强制停止。
 
+**Q: 更新 dsh 失败/很慢?**
+A: 双击 `update.cmd` 报错的话,手动打开 cmd 执行 `npm install -g @deepseek-ai/dsh@latest` 看具体报错(常见:网络问题)。
+
 **Q: API Key 怎么改?**
 A: 编辑 `C:\Users\你的用户名\.dsh\.credentials.yaml`,改 `DEEPSEEK_API_KEY` 那一行。
 
@@ -103,6 +108,7 @@ A: 编辑 `C:\Users\你的用户名\.dsh\.credentials.yaml`,改 `DEEPSEEK_API_KE
 2. 等服务器就绪后,打开应用窗口(优先已安装的 PWA,其次 Edge 应用模式,兜底浏览器)
 3. 隐藏的 `watchdog.ps1` 盯着网络连接:所有窗口关闭后 6 秒,自动停止服务器
 4. 一切结束,没有残留窗口和进程
+5. dsh 发新版本时,`update.cmd` 停止服务器后执行 `npm install -g @deepseek-ai/dsh@latest`,启动器无需改动
 
 ## 许可证
 
