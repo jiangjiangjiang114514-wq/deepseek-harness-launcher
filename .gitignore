@@ -1,0 +1,8 @@
+# runtime logs
+server.log
+watchdog.log
+launcher.log
+
+# OS
+Thumbs.db
+.DS_Store
