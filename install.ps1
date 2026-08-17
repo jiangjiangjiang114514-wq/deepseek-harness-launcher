@@ -67,6 +67,13 @@ if ($node) {
     [Environment]::SetEnvironmentVariable('Path', $newPath, 'User')
   }
   $env:Path = $env:Path + ';' + $dest
+  # 把 npm 全局命令目录也加入用户 PATH(dsh 命令装在这里)
+  $npmBin = Join-Path $env:APPDATA 'npm'
+  if (-not ([Environment]::GetEnvironmentVariable('Path', 'User') -like "*$npmBin*")) {
+    $u = [Environment]::GetEnvironmentVariable('Path', 'User')
+    [Environment]::SetEnvironmentVariable('Path', $u + ';' + $npmBin, 'User')
+    $env:Path = $env:Path + ';' + $npmBin
+  }
   if (Test-Path (Join-Path $dest 'node.exe')) {
     $nodeVer = (& (Join-Path $dest 'node.exe') --version).Trim()
     Ok "Node.js 已自动安装完成 ($nodeVer)"
@@ -87,6 +94,8 @@ if ($hasDsh) {
   npm install -g @deepseek-ai/dsh 2>&1 | Out-Host
   if ($LASTEXITCODE -eq 0 -and (Get-Command dsh -ErrorAction SilentlyContinue)) {
     Ok 'dsh 安装成功'
+    $dshPath = Join-Path $env:APPDATA 'npm\dsh.cmd'
+    if (Test-Path $dshPath) { Ok 'dsh 命令已就位,以后可以随时更新' }
   } else {
     Fail 'dsh 安装失败,请检查网络后重新运行安装器'
     Read-Host '  按回车退出'
