@@ -1,9 +1,8 @@
 @echo off
-chcp 65001 >nul
-title DeepSeek Harness 安装器
+title DeepSeek Harness Installer
 powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0install.ps1"
 if errorlevel 1 (
   echo.
-  echo [失败] 安装出错,请把上面的提示截图反馈
+  echo [FAILED] Installation error. Please screenshot the messages above.
 )
 pause

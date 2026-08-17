@@ -5,6 +5,9 @@
 # ============================================================
 $ErrorActionPreference = 'Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+# 让中文提示在控制台正常显示(防止乱码)
+& chcp 65001 | Out-Null
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 function Step([string]$text) { Write-Host ''; Write-Host "===== $text =====" -ForegroundColor Cyan }
 function Ok([string]$text)  { Write-Host "  [成功] $text" -ForegroundColor Green }
