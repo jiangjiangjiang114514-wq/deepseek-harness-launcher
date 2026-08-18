@@ -31,6 +31,6 @@ if ($dsh) {
   $cmdLine = 'npx --offline @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1 || npx @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1'
 }
 
-Add-Content -Path $log -Value ('[launch-server] attempt: dsh=' + $dsh + ' npx=' + $npx)
-Set-Content -Path $bat -Value ('@echo off' + "\`r\`n" + $cmdLine) -Encoding ASCII
+Add-Content -Path $log -Value ('[launch-server] attempt: dsh=' + $dsh + ' npx=' + $npx) -Encoding Default
+Set-Content -Path $bat -Value ('@echo off' + "`r`n" + $cmdLine) -Encoding Default
 Start-Process cmd -ArgumentList '/c', $bat -WindowStyle Hidden
