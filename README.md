@@ -57,6 +57,7 @@
 - **固定到任务栏**:右键快捷方式 → 固定到任务栏,以后单击即用
 - **首次使用建议装成应用**:打开后,在 Edge 地址栏右侧点"应用"图标 → "将此站点安装为应用",之后窗口更好看
 - **想更新 dsh?** 双击 `update.cmd`
+- **想切换 API Key?** 双击 `key.cmd`(已装用户拿到 key.cmd + key.ps1 两个文件,放任意文件夹双击即可)
 - **想强制停止?** 双击 `stop.cmd`
 
 ---
@@ -93,8 +94,8 @@ A: 需要!这个工具的价值不在"装",而在"用"——把「终端敲命�
 **Q: 服务器能跑,但启动器不弹窗口?**
 A: 更新到最新版本(旧版有已知 bug:隐藏启动服务器的命令引号处理错误,会导致服务器根本没启动,表现为 server.log 为空)。
 
-**Q: API Key 怎么改?**
-A: 编辑 `C:\Users\你的用户名\.dsh\.credentials.yaml`,改 `DEEPSEEK_API_KEY` 那一行。
+**Q: 怎么切换 / 更换 API Key?**
+A: 双击 `key.cmd`,粘贴新 Key 即可(会显示当前 Key 的前几位,输入时不可见)。已装好启动器的用户不需要重装,只要拿到 `key.cmd` 和 `key.ps1` 两个文件(放任意文件夹,两个文件要在一起),双击 key.cmd 就能换。换完如果服务器在运行,重启一次生效。
 
 **Q: 出问题了,怎么把信息给你?**
 A: 双击 `diag.cmd`,把窗口内容截图,连同 `server.log` 最后几行一起发来,基本就能定位。
@@ -112,6 +113,7 @@ A: 双击 `diag.cmd`,把窗口内容截图,连同 `server.log` 最后几行一�
 | `stop.cmd` / `stop.ps1` | 强制停止服务器 |
 | `update.cmd` | 一键更新 dsh 到最新版 |
 | `diag.cmd` | 一键诊断(出问题时先跑它) |
+| `key.cmd` / `key.ps1` | 切换 API Key 工具(两个文件需放同一文件夹,可单独分发) |
 | `check-appwindow.ps1` / `check-watchdog.ps1` | 自检辅助脚本 |
 | `launcher.ico` | 快捷方式图标(DeepSeek 品牌元素版权归 DeepSeek) |
 | `server.log` / `watchdog.log` | 运行日志(自动生成) |
