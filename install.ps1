@@ -115,6 +115,7 @@ if (Test-Path $credFile) {
 }
 if ($keyConfigured) {
   Ok '已配置 API Key,跳过'
+  Write-Host '  提示:想换 Key 的话,装完后双击 key.cmd'
 } else {
   Write-Host ''
   Write-Host '  需要 DeepSeek API Key 才能使用。获取方法(2分钟):'
