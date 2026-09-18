@@ -24,13 +24,14 @@ foreach ($c in @(
 }
 
 if ($dsh) {
-  $cmdLine = 'call "' + $dsh + '" web 1>>"' + $log + '" 2>&1'
+  $cmdLine = 'call "' + $dsh + '" web --no-open 1>>"' + $log + '" 2>&1'
 } elseif ($npx) {
-  $cmdLine = 'call "' + $npx + '" --offline @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1 || call "' + $npx + '" @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1'
+  $cmdLine = 'call "' + $npx + '" --yes @deepseek-ai/dsh web --no-open 1>>"' + $log + '" 2>&1 || call "' + $npx + '" --yes @deepseek-ai/dsh web --no-open 1>>"' + $log + '" 2>&1'
 } else {
-  $cmdLine = 'npx --offline @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1 || npx @deepseek-ai/dsh web 1>>"' + $log + '" 2>&1'
+  $cmdLine = 'npx --yes @deepseek-ai/dsh web --no-open 1>>"' + $log + '" 2>&1 || npx --yes @deepseek-ai/dsh web --no-open 1>>"' + $log + '" 2>&1'
 }
 
+Remove-Item -LiteralPath $log -Force -ErrorAction SilentlyContinue
 Add-Content -Path $log -Value ('[launch-server] attempt: dsh=' + $dsh + ' npx=' + $npx) -Encoding Default
 Set-Content -Path $bat -Value ('@echo off' + "`r`n" + $cmdLine) -Encoding Default
 Start-Process cmd -ArgumentList '/c', $bat -WindowStyle Hidden

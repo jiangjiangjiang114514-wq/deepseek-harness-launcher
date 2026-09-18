@@ -6,3 +6,6 @@ launcher.log
 # OS
 Thumbs.db
 .DS_Store
+
+# local backups made before edits
+*.bak-*

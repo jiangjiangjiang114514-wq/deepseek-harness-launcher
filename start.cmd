@@ -25,7 +25,7 @@ echo (Progress: server.log is written if the server is working)
 rem --- wait for the server, up to 300 seconds ---
 set /a tries=0
 :wait
-powershell -NoProfile -Command "try { (Invoke-WebRequest -UseBasicParsing -Uri '%URL%' -TimeoutSec 2 | Out-Null); exit 0 } catch { exit 1 }"
+powershell -NoProfile -Command "$ok=$false; try { $r = Invoke-WebRequest -UseBasicParsing -Uri '%URL%' -TimeoutSec 2; $ok=$true } catch { if ($_.Exception.Response) { $ok=$true } else { try { $c = New-Object Net.Sockets.TcpClient; $c.Connect('127.0.0.1',3080); $c.Close(); $ok=$true } catch {} } }; if (-not $ok) { exit 1 }; if (-not (Select-String -LiteralPath '%~dp0server.log' -Pattern 'dsh web:' -Quiet -ErrorAction SilentlyContinue)) { exit 1 }; exit 0"
 if not errorlevel 1 goto open
 set /a tries+=1
 set /a mod10 = tries %% 10
@@ -42,21 +42,11 @@ timeout /t 1 /nobreak >nul
 goto wait
 
 :open
-rem --- open the app window: installed PWA first, then Edge app mode ---
-powershell -NoProfile -Command "$app = Get-StartApps | Where-Object { $_.Name -match 'Harness' -and $_.AppID -like '*!App' } | Select-Object -First 1; if ($app) { Start-Process 'explorer.exe' ('shell:AppsFolder\' + $app.AppID); exit 0 } else { exit 1 }"
-if not errorlevel 1 goto watchdog
-set "EDGE=%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe"
-if not exist "%EDGE%" set "EDGE=%ProgramFiles%\Microsoft\Edge\Application\msedge.exe"
-if exist "%EDGE%" (
-  start "" "%EDGE%" --app="%URL%" --profile-directory=Default
-) else (
-  start "" "%URL%"
-)
-rem --- browser fallback if no window within 5s ---
-timeout /t 5 /nobreak >nul
-powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0check-appwindow.ps1"
-if errorlevel 1 start "" "%URL%"
-
+rem --- open the app window ---
+rem open-appwindow.ps1 opens the installed PWA directly (no token exchange).
+rem Only if the app window ever reports 401 / Failed to fetch, run ÊÚÈ¨Ò»´Î.cmd.
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0open-appwindow.ps1"
+goto watchdog
 :watchdog
 rem --- start the watchdog: closing the window stops the server ---
 start "DSH Watchdog" /min powershell -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "%~dp0watchdog.ps1"
